@@ -50,7 +50,7 @@ async def help(ctx):
 
     modhelp = ["• `!prune`, `!ban`, `!kick`, `!mute`, and `!unmute`, do exactly what they say."]
 
-    ownerhelp = ["Command for Era-kun only",
+    ownerhelp = ["Commands for Era-kun only",
                  "• `!sleep` makes the bot go offline",
                  "• `!restart` makes the bot restart",
                  "• `!subprocess` makes the bot execute commands in shell"]
