@@ -4,7 +4,8 @@ import cogs.utils.role_name_grabber as utils
 from time import strftime
 from asyncio import sleep
 from cogs.utils import checks
-from time import time
+from time import perf_counter
+from sys import exit
 
 class utility:
     """Utility"""
@@ -71,27 +72,28 @@ class utility:
             return
         await self.bot.whisper("You had set a reminder on %s GMT for the following message: %s" % (date, msg))
 
-    @commands.command()
-    async def ping(self):
-        if checks.is_owner():
-            message = "Your net is working, Era-kun!"
-        else:
-            message = "Pong!"
-        ping = self.bot.say(message)
-        tmptime = time()
-        await self.bot.get_message(message.channel, ping.id)
-        tmptime1 = time()
-        pingtime = tmptime1 - tmptime
+    @commands.command(pass_context=True)
+    async def ping(self, ctx):
+        t1 = perf_counter()
+        await self.bot.send_typing(ctx.message.channel)
+        t2 = perf_counter()
+        pingtime = t2 - t1
         pingtime *= 1000
-        message += "`%dms`" %pingtime
-
+        message = "Here's your drink."
+        description = "Time taken: %dms" % pingtime
+        text = "Drink ordered by: %s#%s" %(ctx.message.author.name, ctx.message.author.discriminator)
+        if checks.is_owner():
+            message = message.rstrip('.') + ", Boss!"
+        embed = discord.Embed(title=message, description=description)
+        embed.set_footer(text=text)
+        await self.bot.say(embed=embed)
 
     @commands.command()
     @checks.is_owner()
     async def sleep(self):
         await self.bot.say("Boss, Im taking my break.")
         self.bot.close()
-        sys.exit()
+        exit()
 
 def setup(bot):
     bot.add_cog(utility(bot))

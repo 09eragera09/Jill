@@ -7,6 +7,8 @@ from wand.drawing import Drawing
 from wand.image import Image
 from wand.color import Color
 import traceback
+import os
+from cogs.utils import checks
 
 description = """Jill, a shitty bot written in Python, based off of Chiaki"""
 bot = commands.Bot(command_prefix="!", description=description)
@@ -14,17 +16,17 @@ bot = commands.Bot(command_prefix="!", description=description)
 def imageGen(member):
     with Drawing() as draw:
         draw.fill_color = Color('white')
-        draw.font = 'cogs/assets/Whitney_Medium.ttf'
-        if len(member.name) > 15 and len(member.name) < 22:
+        draw.font = './cogs/assets/Whitney_Medium.ttf'
+        if 15 < len(member.name) < 22:
             draw.font_size = 35
         elif len(member.name) >= 22:
             draw.font_size = 30
         else:
             draw.font_size = 40
         draw.text(x=510, y=350, body="User: %s#%s" % (member.name, member.discriminator))
-        with Image(filename='cogs/assets/KUD_3.png') as image:
+        with Image(filename='./cogs/assets/KUD_3.png') as image:
             draw(image)
-            image.save(filename='cogs/assets/test.png')
+            image.save(filename='./cogs/assets/test.png')
             return None
 
 def getTime():
@@ -40,15 +42,65 @@ def calculateTime(totalseconds):
 
     return [totaldays, hours, minutes, seconds]
 
+@bot.command(name='reload', hidden=True, pass_context=True)
+@checks.is_owner()
+async def _reload(ctx, *, cogs: str = None):
+    msg1 = await bot.say('Reloading Cogs...', delete_after=10)
+    if cogs is not None:
+        cogs = cogs.split(' ')
+    elif cogs is None:
+        cogs = [x for x in os.listdir('./cogs') if os.path.isfile(os.path.join('./cogs', x))]
+    for cog in cogs:
+        try:
+            bot.get_cog(cog)
+        except:
+            await bot.say('`'+cog+'` is not a cog.')
+    temp = [cog for cog in cogs]
+    for cog in cogs:
+        bot.unload_extension('cogs'+cog.replace('.py', ''))
+    await sleep(1)
+    load_cogs = []
+    not_loaded = []
+    for cog in cogs:
+        try:
+            bot.load_extension('cogs'+cog.replace('.py', ''))
+        except Exception as e:
+            not_loaded.append(cog.replace('py', ''))
+            raise
+        else:
+            load_cogs.append(cogs.replace('py', ''))
+    if len(load_cogs) != 0:
+        msg_loaded = '***Cogs Reloaded:*** `{}`'.format(", ".join(load_cogs))
+        temp.append(msg_loaded)
+    if len(not_loaded) != 0:
+        msg_not_loaded = '***Cogs Not Loaded:*** `{}`'.format(", ".join(not_loaded))
+        temp.append(msg_not_loaded)
+    msg2 = await bot.say(" | ".join(temp).upper(), delete_after=5)
+    await sleep(2)
+    try:
+        await bot.delete_message(msg1)
+        await bot.delete_message(ctx.message)
+    except:
+        pass
+    await sleep(5)
+    try:
+        await bot.delete_message(msg2)
+    except:
+        pass
+
 @bot.event
 async def on_ready():
     print("Logged in as %s" % bot.user.name)
     print("Time to mix drinks and change lives!")
     print(bot.user.id)
     print('-' * 20)
-    cog_list = ['', ]
-    for x in cog_list:
-        bot.load_extension(x)
+    cogs = [x for x in os.listdir('./cogs') if os.path.isfile(os.path.join('./cogs', x))]
+    cog_list = []
+    for cog in cogs:
+        cog_var = bot.get_cog(cog)
+        cog_list.append(cog_var)
+    for cog in cog_list:
+        bot.load_extension(cog)
     global bot_startup
     bot_startup = getTime()
 
@@ -127,7 +179,6 @@ logger.addHandler(handler)
 global bot_startup
 token = open('token', 'r').read()
 token = token.rstrip('\n')
-
 while True:
     try:
         bot.run(token)

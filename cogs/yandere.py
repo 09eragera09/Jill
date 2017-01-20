@@ -22,26 +22,26 @@ class yandere:
         if cmd == 'yandere':
             if checks.is_image_chan():
                 if checks.is_sfw():
-                    tags = tags + ' rating:s'
+                    tags += ' rating:s'
             else:
                 await self.bot.say("Please try again in an image channel such as <#%s> or <#%s>" % (images.id, nsfw.id))
                 return
         elif cmd == 'sfw':
             if checks.is_image_chan():
-                tags = tags + ' rating:s'
+                tags += ' rating:s'
             else:
                 await self.bot.say("Please try again in an image channel such as <#%s> or <#%s>" % (images.id, nsfw.id))
                 return
         elif cmd == 'nsfw':
             if checks.is_nsfw():
-                tags = tags + ' rating:-s'
+                tags += ' rating:-s'
             else:
                 await self.bot.say("Please try again in an nsfw channel such as <#%s>" % nsfw.id)
                 return
         try:
             try:
                 image_list = self.yandere.post_list(limit=20, tags=tags)
-            except pybooru_errors.PybooruHTTPError as e:
+            except pybooru_errors.PybooruHTTPError:
                 await self.bot.say("You have entered too many tags. Please learn to restrain yourself")
             image = choice(image_list)
             image_url = image['sample_url']

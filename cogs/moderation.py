@@ -7,8 +7,6 @@ class moderation:
     def __init__(self, bot):
         self.bot = bot
 
-
-
     @commands.command(name='prune', pass_context=True)
     @checks.mod_or_permissions()
     async def _prune(self, ctx, *, content: str = None):
