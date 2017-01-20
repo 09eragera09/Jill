@@ -7,14 +7,14 @@ class fun:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='test')
+    @commands.command(name='test', hidden=True)
     async def _test(self):
         """test command"""
         await self.bot.say("This is a test message")
 
     @commands.command()
     async def textface(self, face: str):
-        """replies with text faces, use !textfaces <textface>"""
+        """replies with text faces, use !textfaces <textface>, has lenny, shrug, fiteme, flip/unflip and hug"""
         textface_dict = {'lenny': '( ͡° ͜ʖ ͡°)', 'shrug': '¯\_(ツ)_/¯', 'fiteme': '(ง ͠° ͟ل͜ ͡°)ง', 'flip': '(╯°□°）╯︵ ┻━┻', 'unflip': '┬──┬ ノ( ゜-゜ノ)', 'hug': '༼ つ ◕_◕ ༽つ'}
         emoji = textface_dict[face]
         await self.bot.say(emoji)
@@ -35,34 +35,6 @@ class fun:
         '''your waifu is shit'''
         await self.bot.say("http://azelf.net/mfw/shitwaifu.png")
 
-    @commands.command()
-    async def urban(self, *, search: str):
-        '''urban dictionary best dictionary'''
-        search = search.split()
-        search = '+'.join(search)
-        if not(search):
-            await self.bot.say("Please enter an argument")
-        else:
-            await self.bot.say('http://www.urbandictionary.com/define.php?term=%s' % search)
-
-    @commands.command(name='mal', aliases=["kitsu, anilist"], pass_context=True)
-    async def anime(self, ctx, content: str):
-        '''gets your animelist, supply with username'''
-        cmd = ctx.invoked_with
-        if content is not None:
-            if cmd == 'mal':
-                await self.bot.say('Here\'s your Myanimelist, http://myanimelist.net/animelist/%s' % content)
-            if cmd == 'kitsu':
-                await self.bot.say('Here\'s your Kitsu library, https://kitsu.io/users/%s/library' % content)
-            if cmd == 'anilist':
-                await self.bot.say('Here\'s your anilist animelist, https://anilist.co/user/%s/animelist' % content)
-        else:
-            await self.bot.say("Please enter a username")
-
-    @commands.command()
-    async def enlarge(self, emote : str):
-        emote_id = emote.split(":")[-1].rstrip('>')
-        await self.bot.say("Custom emote has been enlarged, https://discordapp.com/api/emojis/%s.png" % emote_id)
 
 
 #    @commands.command()
