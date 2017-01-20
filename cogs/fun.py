@@ -16,7 +16,7 @@ class fun:
     async def textface(self, face: str):
         """replies with text faces, use !textfaces <textface>, has lenny, shrug, fiteme, flip/unflip and hug"""
         textface_dict = {'lenny': '( ͡° ͜ʖ ͡°)', 'shrug': '¯\_(ツ)_/¯', 'fiteme': '(ง ͠° ͟ل͜ ͡°)ง', 'flip': '(╯°□°）╯︵ ┻━┻', 'unflip': '┬──┬ ノ( ゜-゜ノ)', 'hug': '༼ つ ◕_◕ ༽つ'}
-        emoji = textface_dict[face]
+        emoji = textface_dict.get(face, "Invalid emoji.")
         await self.bot.say(emoji)
 
     @commands.command(name='8ball')
