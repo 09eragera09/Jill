@@ -15,29 +15,30 @@ class yandere:
 
     @commands.command(name='yandere', aliases=['nsfw', 'sfw'], pass_context=True)
     async def yandere_search(self, ctx, *, tags: str = None):
-        """Use the aliases !nsfw and !sfw for specific rating images"""
-        nsfw = getChannel(ctx.message, 'nsfw')
-        images = getChannel(ctx.message, 'images')
+        """Use the aliases !nsfw and !sfw for specific rating images, accepts tags"""
+        nsfw = [x for x in ctx.message.server.channels if x.name == "nsfw"][0]
+        images = [x for x in ctx.message.server.channels if x.name == "images"][0]
         cmd = ctx.invoked_with
         if tags is None:
             tags = ""
         tags = tags.split()
         tags.append("order:random")
+        check = None
         if cmd == 'yandere':
-            if checks.is_image_chan():
-                if checks.is_sfw():
-                    tags.append("rating:s")
+            if ctx.message.channel in [nsfw, images]:
+                if ctx.message.channel == images:
+                    check = "some string"
             else:
                 await self.bot.say("Please try again in an image channel such as <#%s> or <#%s>" % (images.id, nsfw.id))
                 return
         elif cmd == 'sfw':
-            if checks.is_image_chan():
+            if ctx.message.channel in [nsfw, images]:
                 tags.append("rating:s")
             else:
                 await self.bot.say("Please try again in an image channel such as <#%s> or <#%s>" % (images.id, nsfw.id))
                 return
         elif cmd == 'nsfw':
-            if checks.is_nsfw():
+            if ctx.message.channel == nsfw:
                 tags.append("-rating:s")
             else:
                 await self.bot.say("Please try again in an nsfw channel such as <#%s>" % nsfw.id)
@@ -56,6 +57,9 @@ class yandere:
             title = "NSFW Image"
         else:
             title = "SFW Image"
+        if image['rating'] != 's' and check is not None:
+            await self.bot.say("This image is too lewd for this channel, please try again with `!sfw` or append a `rating:s` to the tags")
+            return
         tags = tags.split(' ')
         tags = '+'.join(tags)
         embed = discord.Embed(title=title, url='https://yande.re/post/show/%s' % image['id'])
