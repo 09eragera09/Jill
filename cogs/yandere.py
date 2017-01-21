@@ -14,13 +14,11 @@ class yandere:
         self.yandere = Moebooru('yandere')
 
     @commands.command(name='yandere', aliases=['nsfw', 'sfw'], pass_context=True)
-    async def yandere_search(self, ctx, *, tags: str = None):
+    async def yandere_search(self, ctx, *, tags: str = ""):
         """Use the aliases !nsfw and !sfw for specific rating images, accepts tags"""
         nsfw = [x for x in ctx.message.server.channels if x.name == "nsfw"][0]
         images = [x for x in ctx.message.server.channels if x.name == "images"][0]
         cmd = ctx.invoked_with
-        if tags is None:
-            tags = ""
         tags = tags.split()
         tags.append("order:random")
         check = None
@@ -53,6 +51,7 @@ class yandere:
             image_url = image['sample_url']
         except IndexError:
             await self.bot.say("Nothing found. Please check the spelling or try again with different tags")
+            return
         if image['rating'] != 's':
             title = "NSFW Image"
         else:

@@ -86,7 +86,7 @@ class utility:
         message = "Here's your drink."
         description = "Time taken: %dms" % pingtime
         text = "Drink ordered by: %s#%s" %(ctx.message.author.name, ctx.message.author.discriminator)
-        if checks.is_owner():
+        if checks.is_owner_check(ctx.message):
             message = message.rstrip('.') + ", Boss!"
         embed = discord.Embed(title=message, description=description)
         embed.set_footer(text=text)

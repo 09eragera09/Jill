@@ -64,18 +64,19 @@ async def _reload(ctx, *, cogs: str = None):
     for cog in cogs:
         try:
             bot.load_extension('cogs.'+cog.replace('.py', ''))
-        except Exception as e:
+        except Exception:
             not_loaded.append(cog.replace('py', ''))
             raise
         else:
             load_cogs.append(cog.replace('py', ''))
+    del temp
     if len(load_cogs) != 0:
         msg_loaded = '***Cogs Reloaded:*** `{}`'.format(", ".join(load_cogs))
         temp.append(msg_loaded)
     if len(not_loaded) != 0:
         msg_not_loaded = '***Cogs Not Loaded:*** `{}`'.format(", ".join(not_loaded))
         temp.append(msg_not_loaded)
-    msg2 = await bot.say(" | ".join(temp).upper(), delete_after=5)
+    await bot.say(" | ".join(temp).upper(), delete_after=5)
     await sleep(2)
     try:
         await bot.delete_message(ctx.message)
