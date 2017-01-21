@@ -11,7 +11,7 @@ import os
 from cogs.utils import checks
 
 description = """Jill, a shitty bot written in Python, based off of Chiaki"""
-bot = commands.Bot(command_prefix="!", description=description)
+bot = commands.Bot(command_prefix="!", description=description, pm_help=True)
 
 def imageGen(member):
     with Drawing() as draw:
@@ -57,18 +57,18 @@ async def _reload(ctx, *, cogs: str = None):
             await bot.say('`'+cog+'` is not a cog.')
     temp = [cog for cog in cogs]
     for cog in cogs:
-        bot.unload_extension('cogs'+cog.replace('.py', ''))
+        bot.unload_extension('cogs.'+cog.replace('.py', ''))
     await sleep(1)
     load_cogs = []
     not_loaded = []
     for cog in cogs:
         try:
-            bot.load_extension('cogs'+cog.replace('.py', ''))
+            bot.load_extension('cogs.'+cog.replace('.py', ''))
         except Exception as e:
             not_loaded.append(cog.replace('py', ''))
             raise
         else:
-            load_cogs.append(cogs.replace('py', ''))
+            load_cogs.append(cog.replace('py', ''))
     if len(load_cogs) != 0:
         msg_loaded = '***Cogs Reloaded:*** `{}`'.format(", ".join(load_cogs))
         temp.append(msg_loaded)
@@ -78,29 +78,21 @@ async def _reload(ctx, *, cogs: str = None):
     msg2 = await bot.say(" | ".join(temp).upper(), delete_after=5)
     await sleep(2)
     try:
-        await bot.delete_message(msg1)
         await bot.delete_message(ctx.message)
     except:
         pass
     await sleep(5)
-    try:
-        await bot.delete_message(msg2)
-    except:
-        pass
 
 @bot.event
 async def on_ready():
-    print("Logged in as %s" % bot.user.name)
+    print("Logged in as Alice_Rabbit")
     print("Time to mix drinks and change lives!")
     print(bot.user.id)
     print('-' * 20)
     cogs = [x for x in os.listdir('./cogs') if os.path.isfile(os.path.join('./cogs', x))]
-    cog_list = []
     for cog in cogs:
-        cog_var = bot.get_cog(cog)
-        cog_list.append(cog_var)
-    for cog in cog_list:
-        bot.load_extension(cog)
+        x = 'cogs.' + cog.replace('.py', '')
+        bot.load_extension(x)
     global bot_startup
     bot_startup = getTime()
 
@@ -135,7 +127,7 @@ async def on_voice_state_update(before, after):
 @bot.event
 async def on_member_join(member):
     imagegen = imageGen(member)
-    await bot.send_file(member.server, 'assets/test.png', content="Welcome to Kindly United Dreams, %s, Please read the rules over at <#%s>" % (member.mention, [x.id for x in member.server.channels if x.name == "readme"][0]))
+    await bot.send_file(member.server, './cogs/assets/test.png', content="Welcome to Kindly United Dreams, %s, Please read the rules over at <#%s>" % (member.mention, [x.id for x in member.server.channels if x.name == "readme"][0]))
     music_role = [x for x in member.server.roles if x.name == "Music"][0]
     image_role = [x for x in member.server.roles if x.name == "Image"][0]
     suggestion_role = [x for x in member.server.roles if x.name == "Suggestion"][0]
@@ -147,17 +139,18 @@ async def on_member_join(member):
 
 @bot.command()
 async def source():
-    bot.say("Here's my source code https://github.com/09eragera09/Jill/blob/master/Jill.py")
+    await bot.say("Here's my source code https://github.com/09eragera09/Jill/blob/master/Jill.py")
 
 
 @bot.command()
 async def invite():
-    bot.say("Here's my invite link https://discordapp.com/oauth2/authorize?&client_id=271241978556055552&scope=bot")
+    await bot.say("Here's my invite link https://discordapp.com/oauth2/authorize?&client_id=271241978556055552&scope=bot")
 
 
 @bot.command()
-async def setGame(*, game: str):
-    bot.change_presence(game=discord.Game(name=game))
+async def setGame(*, game_name: str = None):
+    game = discord.Game
+    await bot.change_presence(game=game(name=game_name))
 
 @bot.command()
 async def status():

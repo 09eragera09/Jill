@@ -17,7 +17,7 @@ class general:
         else:
             await self.bot.say('http://www.urbandictionary.com/define.php?term=%s' % search)
 
-    @commands.command(name='mal', aliases=["kitsu, anilist"], pass_context=True)
+    @commands.command(name='mal', aliases=["kitsu", "anilist"], pass_context=True)
     async def anime(self, ctx, content: str):
         '''gets your animelist, supply with username'''
         cmd = ctx.invoked_with
@@ -33,17 +33,20 @@ class general:
 
     @commands.command()
     async def enlarge(self, emote: str):
+        """Enlarges any custom emotes such as ones from NGNL"""
         emote_id = emote.split(":")[-1].rstrip('>')
         await self.bot.say("Custom emote has been enlarged, https://discordapp.com/api/emojis/%s.png" % emote_id)
 
     @commands.command()
     @checks.is_owner()
     async def say(self, *, msg: str):
+        """Makes the bot say stuff. Owner only"""
         await self.bot.say(msg)
 
     @commands.command()
     @checks.is_owner()
-    async def say(self, *, var: str):
+    async def eval(self, *, var: str):
+        """Evaluates stuff. Owner only"""
         await self.bot.say(eval(var))
 
 

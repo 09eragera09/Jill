@@ -13,10 +13,10 @@ class fun:
         await self.bot.say("This is a test message")
 
     @commands.command()
-    async def textface(self, face: str):
-        """replies with text faces, use !textfaces <textface>, has lenny, shrug, fiteme, flip/unflip and hug"""
+    async def textface(self, face: str = None):
+        """replies with text faces, use !textfaces <textface>"""
         textface_dict = {'lenny': '( ͡° ͜ʖ ͡°)', 'shrug': '¯\_(ツ)_/¯', 'fiteme': '(ง ͠° ͟ل͜ ͡°)ง', 'flip': '(╯°□°）╯︵ ┻━┻', 'unflip': '┬──┬ ノ( ゜-゜ノ)', 'hug': '༼ つ ◕_◕ ༽つ'}
-        emoji = textface_dict.get(face, "Invalid emoji.")
+        emoji = textface_dict.get(face, "Invalid emoji. The bot only has lenny, shrug, fiteme, flip/unflip and hug.")
         await self.bot.say(emoji)
 
     @commands.command(name='8ball')

@@ -20,6 +20,7 @@ class utility:
 
     @commands.command(name='userinfo', pass_context=True)
     async def userinfo(self, ctx, *, username: str = None):
+        """Userinfo command. Par for the course"""
         if username is None:
             username = ctx.message.author.name
         elif ctx.message.mentions and not ctx.message.mention_everyone:
@@ -31,12 +32,13 @@ class utility:
         embed = discord.Embed(title="❯ Member Details", description="• Nickname: %s\n• Roles: %s\n• Joined at: %s" % (member.nick, role_list_joined, member.joined_at.strftime("%A, %B %d, %Y, %I:%M %p")), color=0x9A32CD)
         embed.add_field(name="❯ User Details", value="• Created at: %s\n• Status: %s\n• Game: %s" % (member.created_at.strftime("%A, %B %d, %Y, %I:%M %p"), member.status, game), inline=True)
         embed.set_author(name="%s#%s" % (member.name, member.discriminator), icon_url=member.avatar_url)
-        embed.set_footer(text="Userinfo, a method on the shitty python bot Chiaki", icon_url=self.bot.user.avatar_url)
+        embed.set_footer(text="Userinfo, a method on the shitty python bot Jill", icon_url=self.bot.user.avatar_url)
         embed.set_thumbnail(url=member.avatar_url)
         await self.bot.say(embed=embed)
 
     @commands.command(name='avatar', aliases=['ava', 'avi'], pass_context=True)
     async def avatar(self, ctx, user: str = None):
+        """Gets Avatar"""
         if user is None:
             user = ctx.message.author
         elif ctx.message.mentions and not ctx.message.mention_everyone:
@@ -50,6 +52,7 @@ class utility:
 
     @commands.command(name='remind', aliases=['remindme', 'reminder'], pass_context=True)
     async def _remind(self, ctx, timestr: str, format: str, *, msg: str):
+        """Reminder command"""
         try_again = "Please try again. It should be in the form of `!remind (a number) (hours/minutes/seconds) (a message)`"
         try:
             time = int(timestr)
@@ -74,6 +77,7 @@ class utility:
 
     @commands.command(pass_context=True)
     async def ping(self, ctx):
+        "pong!"
         t1 = perf_counter()
         await self.bot.send_typing(ctx.message.channel)
         t2 = perf_counter()
@@ -90,7 +94,8 @@ class utility:
 
     @commands.command()
     @checks.is_owner()
-    async def sleep(self):
+    async def shutdown(self):
+        """Shuts the bot down"""
         await self.bot.say("Boss, Im taking my break.")
         self.bot.close()
         exit()

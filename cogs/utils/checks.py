@@ -7,7 +7,7 @@ config = ConfigParser()
 config.read('data/config/config.ini')
 
 def is_owner_check(message):
-    if message.author.id == config["owner"]["id"]:
+    if message.author.id == "94374744576512000":
         return True
     return False
 

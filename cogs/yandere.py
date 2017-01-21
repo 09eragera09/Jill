@@ -13,31 +13,36 @@ class yandere:
         self.bot = bot
         self.yandere = Moebooru('yandere')
 
-    @commands.command(name='yandere', aliases=['nsfw', 'sfw'])
-    async def yandere_search(self, ctx, *, tags: str):
+    @commands.command(name='yandere', aliases=['nsfw', 'sfw'], pass_context=True)
+    async def yandere_search(self, ctx, *, tags: str = None):
+        """Use the aliases !nsfw and !sfw for specific rating images"""
         nsfw = getChannel(ctx.message, 'nsfw')
         images = getChannel(ctx.message, 'images')
         cmd = ctx.invoked_with
-        tags = tags + ' order:random'
+        if tags is None:
+            tags = ""
+        tags = tags.split()
+        tags.append("order:random")
         if cmd == 'yandere':
             if checks.is_image_chan():
                 if checks.is_sfw():
-                    tags += ' rating:s'
+                    tags.append("rating:s")
             else:
                 await self.bot.say("Please try again in an image channel such as <#%s> or <#%s>" % (images.id, nsfw.id))
                 return
         elif cmd == 'sfw':
             if checks.is_image_chan():
-                tags += ' rating:s'
+                tags.append("rating:s")
             else:
                 await self.bot.say("Please try again in an image channel such as <#%s> or <#%s>" % (images.id, nsfw.id))
                 return
         elif cmd == 'nsfw':
             if checks.is_nsfw():
-                tags += ' rating:-s'
+                tags.append("-rating:s")
             else:
                 await self.bot.say("Please try again in an nsfw channel such as <#%s>" % nsfw.id)
                 return
+        tags = ' '.join(tags)
         try:
             try:
                 image_list = self.yandere.post_list(limit=20, tags=tags)
@@ -55,9 +60,9 @@ class yandere:
         tags = '+'.join(tags)
         embed = discord.Embed(title=title, url='https://yande.re/post/show/%s' % image['id'])
         embed.set_author(name="Search Results", url='https://yande.re/post?tags=%s' % tags)
-        embed.set_image(image_url)
+        embed.set_image(url=image_url)
         embed.set_footer(text="Image might take a while to appear | Disclaimer: The user is responsible for his searches. The bartender cares not.")
-        await self.bot.say(embed)
+        await self.bot.say(embed=embed)
 
 
 

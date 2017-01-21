@@ -10,6 +10,7 @@ class moderation:
     @commands.command(name='prune', pass_context=True)
     @checks.mod_or_permissions()
     async def _prune(self, ctx, *, content: str = None):
+        "Prunes stuff. Can take multiple user names in any order"
         if content is not None:
             content = content.split()
             num = 0
@@ -41,24 +42,28 @@ class moderation:
     @commands.command(pass_context=True)
     @checks.mod_or_permissions()
     async def ban(self, ctx):
+        """Bans people"""
         for member in ctx.message.mentions:
             await self.bot.ban(member)
 
     @commands.command(pass_context=True)
     @checks.mod_or_permissions()
     async def kick(self, ctx):
+        """Kicks people"""
         for member in ctx.message.mentions:
             await self.bot.kick(member)
 
     @commands.command(pass_context=True)
     @checks.mod_or_permissions()
     async def unban(self, ctx):
+        """Unbans people, WIP"""
         for member in ctx.message.mentions:
             await self.bot.unban(member)
 
     @commands.command(pass_context=True)
     @checks.mod_or_permissions()
     async def mute(self, ctx):
+        "Adds the 'Muted' role to users, creates one if it doesnt exist"
         if ctx.message.mentions and not ctx.message.mention_everyone:
             for member in ctx.message.mentions:
                 if not "Muted" in [x.name for x in member.server.roles]:
@@ -69,6 +74,7 @@ class moderation:
     @commands.command(pass_context=True)
     @checks.mod_or_permissions()
     async def unmute(self, ctx):
+        """Removes the 'Muted' role from users"""
         if ctx.message.mentions and not ctx.message.mention_everyone:
             for member in ctx.message.mentions:
                 if not "Muted" in [x.name for x in member.roles]:
