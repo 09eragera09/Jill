@@ -38,8 +38,12 @@ def calculateTime(totalseconds):
 
     return [totaldays, hours, minutes, seconds]
 
-@bot.command(name='reload', hidden=True, pass_context=True)
+@bot.group(hidden=True)
 @checks.is_owner()
+async def cogs():
+    pass
+
+@cogs.command(name='reload', hidden=True, pass_context=True)
 async def _reload(ctx, *, cogs: str = None):
     await bot.say('Reloading Cogs...', delete_after=10)
     if cogs is not None:
@@ -66,20 +70,35 @@ async def _reload(ctx, *, cogs: str = None):
         else:
             load_cogs.append(cog.replace('py', ''))
     del temp
-    temp = []
+    embed = discord.Embed(title="Cogs have been reloaded!", color=0x9A32CD)
+    embed.set_author(name="Bossu!", icon_url=bot.user.avatar_url)
     if len(load_cogs) != 0:
-        msg_loaded = '***Cogs Reloaded:*** `{}`'.format(", ".join(load_cogs))
-        temp.append(msg_loaded)
+        msg_loaded = ", ".join(load_cogs).title()
+        embed.add_field(name="❯ Cogs that were reloaded:", value=msg_loaded)
     if len(not_loaded) != 0:
-        msg_not_loaded = '***Cogs Not Loaded:*** `{}`'.format(", ".join(not_loaded))
-        temp.append(msg_not_loaded)
-    await bot.say(" | ".join(temp).upper(), delete_after=5)
-    await sleep(2)
-    try:
-        await bot.delete_message(ctx.message)
-    except:
-        pass
-    await sleep(5)
+        msg_not_loaded = ", ".join(not_loaded).title()
+        embed.add_field(name="❯ Cogs that couldn't be reloaded:", value=msg_not_loaded)
+    await bot.say(embed=embed)
+
+@cogs.command(name='list')
+async def _list():
+    all_cogs = [f for f in os.listdir("./cogs") if os.path.isfile(os.path.join("./cogs", f))]
+    loaded = []
+    unloaded = []
+    for cog in all_cogs:
+        cog = cog.split(".")[0]
+        ccog = bot.get_cog(cog.lower())
+        if ccog:
+            loaded.append(cog.replace("_", " ").title())
+        else:
+            unloaded.append(cog.replace("_", " ").title())
+    embed = discord.Embed(title="Cogs currently loaded", description="Total Cogs: %d | Loaded : %d | Unloaded : %d" %(len(all_cogs), len(loaded), len(unloaded)), color=0x9A32CD)
+    if len(loaded) != 0:
+        embed.add_field(name="Loaded Cogs:", value=", ".join(loaded))
+    if len(unloaded) != 0:
+        embed.add_field(name="Unloaded Cogs:", value=", ".join(unloaded), inline=False)
+    await bot.say(embed=embed)
+
 
 @bot.event
 async def on_ready():
@@ -149,7 +168,7 @@ async def invite():
     await bot.say("Here's my invite link https://discordapp.com/oauth2/authorize?&client_id=271241978556055552&scope=bot")
 
 
-@bot.command()
+@bot.command(hidden=True)
 @checks.is_owner()
 async def setGame(*, game_name: str = None):
     game = discord.Game

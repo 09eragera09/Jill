@@ -15,12 +15,12 @@ class yandere:
 
     @commands.command(name='yandere', aliases=['nsfw', 'sfw'], pass_context=True)
     async def yandere_search(self, ctx, *, tags: str = ""):
-        """Use the aliases !nsfw and !sfw for specific rating images, accepts tags"""
+        """Aliases !nsfw and !sfw for specific rated images, accepts tags"""
         nsfw = [x for x in ctx.message.server.channels if x.name == "nsfw"][0]
         images = [x for x in ctx.message.server.channels if x.name == "images"][0]
         cmd = ctx.invoked_with
         tags = tags.split()
-        tags.append("order:random")
+        tags.append("order:random -partial scan")
         check = None
         if cmd == 'yandere':
             if ctx.message.channel in [nsfw, images]:

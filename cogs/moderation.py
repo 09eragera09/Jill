@@ -53,7 +53,7 @@ class moderation:
         for member in ctx.message.mentions:
             await self.bot.kick(member)
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, hidden=True)
     @checks.mod_or_permissions()
     async def unban(self, ctx):
         """Unbans people, WIP"""

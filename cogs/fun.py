@@ -35,6 +35,18 @@ class fun:
         '''your waifu is shit'''
         await self.bot.say("http://azelf.net/mfw/shitwaifu.png")
 
+    @commands.command(name='choose', aliases=['choice'])
+    async def _choose(self, *, choices: str = None):
+        """Have Jill choose something for you, use | to split choices"""
+        if choices is None:
+            await self.bot.say("Give me something to choose")
+            return
+        if "|" in choices:
+            _choice = choice(choices.split("|"))
+            embed = discord.Embed(title="I'd put my money on..", description=_choice, color=0x9A32CD)
+            await self.bot.say(embed=embed)
+        else:
+            await self.bot.say("Please use correct syntax.")
 
 
 #    @commands.command()

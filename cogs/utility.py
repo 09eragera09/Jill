@@ -88,7 +88,7 @@ class utility:
         text = "Drink ordered by: %s#%s" %(ctx.message.author.name, ctx.message.author.discriminator)
         if checks.is_owner_check(ctx.message):
             message = message.rstrip('.') + ", Boss!"
-        embed = discord.Embed(title=message, description=description)
+        embed = discord.Embed(title=message, description=description, color=0x9A32CD)
         embed.set_footer(text=text)
         await self.bot.say(embed=embed)
 
