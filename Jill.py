@@ -120,18 +120,18 @@ async def on_ready():
 async def on_message(message):
     try:
         await bot.process_commands(message)
-    except discord.ext.commands.errors.DisabledCommand as e:
-        await bot.say("*`{}` is disabled*".format(str(e).split(" ")[0]))
-    except discord.ext.commands.errors.CheckFailure as e:
-        await bot.say("```You do not have permission for this command!```")
-    except discord.ext.commands.errors.CommandOnCooldown as e:
-        await bot.say("```{}```".format(str(e)))
-    except discord.ext.commands.errors.BadArgument as e:
-        await bot.say("```{}```".format(str(e)))
-    except discord.ext.commands.errors.CommandError as e:
-        message.command.dispatch_error(e, message)
-        error = traceback.format_exc().split("The above exception was the direct cause of the following exception:")[0]
-        await bot.say("An Error Has Occurred: ```py\n{}```".format(error))
+#    except discord.ext.commands.errors.DisabledCommand as e:
+#       await bot.say("*`{}` is disabled*".format(str(e).split(" ")[0]))
+#    except discord.ext.commands.errors.CheckFailure as e:
+#       await bot.say("```You do not have permission for this command!```")
+#    except discord.ext.commands.errors.CommandOnCooldown as e:
+#       await bot.say("```{}```".format(str(e)))
+#    except discord.ext.commands.errors.BadArgument as e:
+#       await bot.say("```{}```".format(str(e)))
+#    except discord.ext.commands.errors.CommandError as e:
+#        message.command.dispatch_error(e, message)
+#        error = traceback.format_exc().split("The above exception was the direct cause of the following exception:")[0]
+#        await bot.say("An Error Has Occurred: ```py\n{}```".format(error))
     except:
         raise
 
@@ -154,19 +154,6 @@ async def on_member_join(member):
     await bot.add_roles(member, role_list[0], role_list[1], role_list[2])
     await sleep(300)
     await bot.add_roles(member, [x for x in member.server.roles if x.name == "People"][0])
-
-
-@bot.command()
-async def source():
-    '''Get source on github'''
-    await bot.say("Here's my source code https://github.com/09eragera09/Jill")
-
-
-@bot.command()
-async def invite():
-    '''Invite link to add to more servers'''
-    await bot.say("Here's my invite link https://discordapp.com/oauth2/authorize?&client_id=271241978556055552&scope=bot")
-
 
 @bot.command(hidden=True)
 @checks.is_owner()
