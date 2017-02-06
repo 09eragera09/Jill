@@ -84,11 +84,10 @@ class utility:
         pingtime = t2 - t1
         pingtime *= 1000
         message = "Here's your drink."
-        description = "Time taken: %dms" % pingtime
         text = "Drink ordered by: %s#%s" %(ctx.message.author.name, ctx.message.author.discriminator)
         if checks.is_owner_check(ctx.message):
             message = message.rstrip('.') + ", Boss!"
-        embed = discord.Embed(title=message, description=description, color=0x9A32CD)
+        embed = discord.Embed(title=message, description="Time taken: %dms" % pingtime, color=0x9A32CD)
         embed.set_footer(text=text)
         await self.bot.say(embed=embed)
 
@@ -99,6 +98,7 @@ class utility:
         await self.bot.say("Boss, Im taking my break.")
         self.bot.close()
         exit()
+
 
 def setup(bot):
     bot.add_cog(utility(bot))

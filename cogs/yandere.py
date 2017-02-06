@@ -20,7 +20,7 @@ class yandere:
         images = [x for x in ctx.message.server.channels if x.name == "images"][0]
         cmd = ctx.invoked_with
         tags = tags.split()
-        tags.append("order:random -partial scan")
+        tags.append("order:random -partial_scan")
         check = None
         if cmd == 'yandere':
             if ctx.message.channel in [nsfw, images]:

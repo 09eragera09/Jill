@@ -49,6 +49,16 @@ class general:
         """Evaluates stuff. Owner only"""
         await self.bot.say(eval(var))
 
+    @commands.command()
+    async def invite(self):
+        '''Invite link to add to more servers'''
+        await self.bot.say(
+            "Here's my invite link https://discordapp.com/oauth2/authorize?&client_id=271241978556055552&scope=bot")
+
+    @commands.command()
+    async def source(self):
+        '''Get source on github'''
+        await self.bot.say("Here's my source code https://github.com/09eragera09/Jill")
 
 
 def setup(bot):
