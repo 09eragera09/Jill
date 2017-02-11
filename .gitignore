@@ -88,7 +88,9 @@ ENV/
 # Rope project settings
 .ropeproject
 token
-to_do_list
-assets/
+Stuff_to_add
+cogs/assets/test.png
 stuff_to_add
-
+pb_token
+data/assets/
+cogs/assets/music

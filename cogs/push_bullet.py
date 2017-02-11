@@ -12,7 +12,7 @@ class push_bullet:
 
     @coroutine
     async def on_message(self, message):
-        if message.mentions:
+        if message.mentions and not message.author.bot:
             for x in message.mentions:
                 if x.id == "94374744576512000":
                     self.phone.push_note("Hey! Someone mentioned you.", "%s on %s" % (message.author.name, message.server.name))

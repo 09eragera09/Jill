@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import os
 from random import shuffle
+from cogs.utils import checks
 
 class voice:
     """Plays Valhalla OST for no reason at all"""
@@ -10,6 +11,7 @@ class voice:
         discord.opus.load_opus("libopus.so.0")
 
     @commands.command(name="tunes", aliases=["me_too,_thanks", "jukebox"])
+    @checks.is_owner()
     async def connect_to_voice(self):
         """To have the bot play nice Jukebox music"""
         channel = discord.utils.get(self.bot.get_all_channels(), name="VA-11 HALL-A Bar", type=discord.ChannelType.voice, server__id="234643592528789505")
@@ -17,6 +19,13 @@ class voice:
         music_list = [x for x in os.listdir('./cogs/assets/music') if os.path.isfile(os.path.join('./cogs/assets/music', x))]
         await self.bot.say("Ok, Ill start up the Jukebox.")
         self.play_list(music_list, self.voice)
+
+    @commands.command(name="stop", aliases=["pls_stop", "disconnect"])
+    @checks.is_owner()
+    async def actually_stop(self):
+        """makes the voice client disconnect"""
+        await self.voice.disconnect()
+
 
     def play_list(self, music_list, voice):
         self.position = 0
@@ -44,16 +53,17 @@ class voice:
 
     @commands.command(name="play")
     async def play_a_song(self, num: str = None):
+        music_list_ = [x for x in os.listdir('./cogs/assets/music') if os.path.isfile(os.path.join('./cogs/assets/music', x))]
         if num is None:
-            await self.bot.say()
+            listy = ["Currently we have the following songs in the Jukebox, please pick a song number from the list.\n"]
+            for i in range(len(music_list_)):
+                listy.append("%d. %s" % (i, music_list_[i].rstrip(".ogg").replace("_", " ").title()))
+            await self.bot.say('\n'.join(listy))
         else:
-            return
-
-
-    @commands.command(name="stop", aliases=["pls_stop", "disconnect"])
-    async def actually_stop(self):
-        """makes the client disconnect"""
-        await self.voice.disconnect()
+            song = music_list_[int(num)]
+            self.music_list.remove(song)
+            self.music_list.insert(0, song)
+            self.player.stop()
 
     @commands.command(name="list")
     async def song_list(self):
