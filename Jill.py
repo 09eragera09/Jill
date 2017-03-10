@@ -155,6 +155,10 @@ async def on_member_join(member):
     await sleep(300)
     await bot.add_roles(member, [x for x in member.server.roles if x.name == "People"][0])
 
+@bot.event
+async def on_member_remove(member):
+    await bot.say("Thanks for your patronage, %s, please come again." % member)
+
 @bot.command(hidden=True)
 @checks.is_owner()
 async def setGame(*, game_name: str = None):
