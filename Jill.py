@@ -157,7 +157,7 @@ async def on_member_join(member):
 
 @bot.event
 async def on_member_remove(member):
-    await bot.say("Thanks for your patronage, %s, please come again." % member)
+    await bot.say("Thanks for your patronage, %s, please come again." % member.name)
 
 @bot.command(hidden=True)
 @checks.is_owner()
