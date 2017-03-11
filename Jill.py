@@ -3,10 +3,9 @@ from discord.ext import commands
 from time import time
 import logging
 from asyncio import sleep, coroutine
-from wand.drawing import Drawing, TEXT_ALIGN_TYPES
+from wand.drawing import Drawing
 from wand.image import Image
 from wand.color import Color
-import traceback
 import os
 from cogs.utils import checks
 
@@ -19,7 +18,9 @@ def imageGen(member):
         draw.font = './cogs/assets/Whitney_Medium.ttf'
         draw.font_size = 55
         draw.text_alignment = 'right'
-        draw.text(x=1465, y=512, body="User: %s#%s" % (member.name, member.discriminator))
+        member_name = member.name.encode()
+        member_name = member_name.decode(encoding='ascii', errors='ignore')
+        draw.text(x=1465, y=512, body="User: %s#%s" % (member_name, member.discriminator))
         with Image(filename='./cogs/assets/Stella_KUD.png') as image:
             draw(image)
             image.save(filename='./cogs/assets/test.png')
@@ -151,9 +152,17 @@ async def on_member_join(member):
     image_role = [x for x in member.server.roles if x.name == "Image"][0]
     suggestion_role = [x for x in member.server.roles if x.name == "Suggestion"][0]
     role_list = [music_role, image_role, suggestion_role]
-    await bot.add_roles(member, role_list[0], role_list[1], role_list[2])
-    await sleep(300)
-    await bot.add_roles(member, [x for x in member.server.roles if x.name == "People"][0])
+    neku_pls = [[x for x in member.server.roles if x.name == "5 Minutes Left"][0], [x for x in member.server.roles if x.name == "4 Minutes Left"][0], [x for x in member.server.roles if x.name == "3 Minutes Left"][0], [x for x in member.server.roles if x.name == "2 Minutes Left"][0], [x for x in member.server.roles if x.name == "1 Minute Left"][0], [x for x in member.server.roles if x.name == "People"][0]]
+    for x in role_list:
+        await bot.add_roles(member, x)
+    for x in neku_pls:
+        await sleep(60)
+        try:
+            await bot.remove_roles(member, shitty_role)
+        except:
+            pass
+        await bot.add_roles(member, x)
+        shitty_role = x
 
 @bot.event
 async def on_member_remove(member):

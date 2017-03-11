@@ -91,6 +91,21 @@ class utility:
         embed.set_footer(text=text)
         await self.bot.say(embed=embed)
 
+    @commands.command(pass_context=True)
+    async def serverinfo(self, ctx):
+        "Gets serverinfo, what else"
+        server = ctx.message.server
+        embed = discord.Embed(title=server.name, description="Up and running since %s. That's about %s days!" % (server.created_at.strftime("%d %b %Y %H:%M"), (ctx.message.timestamp - server.created_at).days))
+        embed.set_thumbnail(url=server.icon_url)
+        embed.add_field(name="Region", value=server.region)
+        embed.add_field(name="Users", value="%d Online/%d Total Users" % (len([m for m in server.members if m.status != discord.Status.dnd]), server.member_count))
+        embed.add_field(name="Text Channels", value=str(len([x for x in server.channels if x.type == discord.ChannelType.text])))
+        embed.add_field(name="Voice Channels", value=str(len([x for x in server.channels if x.type == discord.ChannelType.voice])))
+        embed.add_field(name="Roles", value=str(len(server.roles)))
+        embed.add_field(name="Owner", value="%s#%s" % (server.owner.name, server.owner.discriminator))
+        embed.set_footer(text="Server ID: %s" % (server.id))
+        await self.bot.say(embed=embed)
+
     @commands.command()
     @checks.is_owner()
     async def shutdown(self):
