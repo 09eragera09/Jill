@@ -95,7 +95,7 @@ class utility:
     async def serverinfo(self, ctx):
         "Gets serverinfo, what else"
         server = ctx.message.server
-        embed = discord.Embed(title=server.name, description="Up and running since %s. That's about %s days!" % (server.created_at.strftime("%d %b %Y %H:%M"), (ctx.message.timestamp - server.created_at).days))
+        embed = discord.Embed(title=server.name, description="Up and running since %s. That's about %s days!" % (server.created_at.strftime("%d %b %Y %H:%M"), (ctx.message.timestamp - server.created_at).days), color=0x9A32CD)
         embed.set_thumbnail(url=server.icon_url)
         embed.add_field(name="Region", value=server.region)
         embed.add_field(name="Users", value="%d Online/%d Total Users" % (len([m for m in server.members if m.status != discord.Status.dnd]), server.member_count))

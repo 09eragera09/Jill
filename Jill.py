@@ -152,18 +152,11 @@ async def on_member_join(member):
     image_role = [x for x in member.server.roles if x.name == "Image"][0]
     suggestion_role = [x for x in member.server.roles if x.name == "Suggestion"][0]
     role_list = [music_role, image_role, suggestion_role]
-    neku_pls = [[x for x in member.server.roles if x.name == "5 Minutes Left"][0], [x for x in member.server.roles if x.name == "4 Minutes Left"][0], [x for x in member.server.roles if x.name == "3 Minutes Left"][0], [x for x in member.server.roles if x.name == "2 Minutes Left"][0], [x for x in member.server.roles if x.name == "1 Minute Left"][0], [x for x in member.server.roles if x.name == "People"][0]]
-    for x in role_list:
-        await bot.add_roles(member, x)
-    for x in neku_pls:
-        await sleep(60)
-        try:
-            await bot.remove_roles(member, shitty_role)
-        except:
-            pass
-        await bot.add_roles(member, x)
-        shitty_role = x
-
+    await bot.add_roles(member, role_list[0], role_list[1], role_list[2])
+    await sleep(300)
+    await bot.add_roles(member, [x for x in member.server.roles if x.name == "People"][0])
+    
+    
 @bot.event
 async def on_member_remove(member):
     await bot.send_message(member.server, "Thanks for your patronage, %s, please come again." % member.name)
