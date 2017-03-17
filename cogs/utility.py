@@ -110,7 +110,6 @@ class utility:
     async def welcomecard(self):
         """For those people who expect me to hand them a working welcome card bot all by itself"""
         await self.bot.say(embed="Interested in using the welcome card that you see on this server? Sadly that is not possible. While the bot in itself is open source and allows you to take a look at its code, I will not be helping you with that process, and aditionally the welcome card image is off-limits. If you do use the welcome image, and I hear of it, I will abuse my power to kick/ban you from this server. Thanks for reading.")
-")
 
     @commands.command()
     @checks.is_owner()
