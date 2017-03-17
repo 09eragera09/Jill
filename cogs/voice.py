@@ -14,7 +14,7 @@ class voice:
     @checks.is_owner()
     async def connect_to_voice(self):
         """To have the bot play nice Jukebox music"""
-        channel = discord.utils.get(self.bot.get_all_channels(), name="VA-11 HALL-A Bar", type=discord.ChannelType.voice, server__id="234643592528789505")
+        channel = self.bot.get_channel("279686810894860298")
         self.voice = await self.bot.join_voice_channel(channel)
         music_list = [x for x in os.listdir('./cogs/assets/music') if os.path.isfile(os.path.join('./cogs/assets/music', x))]
         await self.bot.say("Ok, Ill start up the Jukebox.")
@@ -78,7 +78,14 @@ class voice:
             num += 1
         await self.bot.say('\n'.join(listx))
 
-    #@commands.command(name="")
+    def __unload(self):
+        for state in self.voice_states.values():
+            try:
+                state.audio_player.cancel()
+                if state.voice:
+                    self.bot.loop.create_task(state.voice.disconnect())
+            except:
+                pass
 
 def setup(bot):
     bot.add_cog(voice(bot))

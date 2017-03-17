@@ -8,5 +8,3 @@ class thecog:
 
 def setup(bot):
     bot.add_cog(thecog(bot))
-
-    #@commands.cooldown(5, 10, commands.BucketType.user)

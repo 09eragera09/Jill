@@ -4,7 +4,7 @@ import cogs.utils.role_name_grabber as utils
 from time import strftime
 from asyncio import sleep
 from cogs.utils import checks
-from time import perf_counter
+from time import perf_counter, time
 from sys import exit
 
 class utility:
@@ -106,6 +106,12 @@ class utility:
         embed.set_footer(text="Server ID: %s" % (server.id))
         await self.bot.say(embed=embed)
 
+    @commands.command(pass_context=True)
+    async def welcomecard(self):
+        """For those people who expect me to hand them a working welcome card bot all by itself"""
+        await self.bot.say(embed="Interested in using the welcome card that you see on this server? Sadly that is not possible. While the bot in itself is open source and allows you to take a look at its code, I will not be helping you with that process, and aditionally the welcome card image is off-limits. If you do use the welcome image, and I hear of it, I will abuse my power to kick/ban you from this server. Thanks for reading.")
+")
+
     @commands.command()
     @checks.is_owner()
     async def shutdown(self):
@@ -113,6 +119,46 @@ class utility:
         await self.bot.say("Boss, Im taking my break.")
         self.bot.close()
         exit()
+
+    def getTime(self):
+        return time()
+
+    async def on_ready(self):
+        global bot_startup
+        bot_startup = self.getTime()
+        game = discord.Game
+        await self.bot.change_presence(game=game(name="VA-11 HALL-A"))
+
+    @commands.command(hidden=True)
+    @checks.is_owner()
+    async def setGame(self, *, game_name: str = None):
+        game = discord.Game
+        await self.bot.change_presence(game=game(name=game_name))
+
+    def calculateTime(self, totalseconds):
+        totalminutes = int(totalseconds / 60)
+        seconds = int(totalseconds % 60)
+        totalhours = int(totalminutes / 60)
+        minutes = int(totalminutes % 60)
+        totaldays = int(totalhours / 24)
+        hours = int(totalhours % 24)
+
+        return [totaldays, hours, minutes, seconds]
+
+    @commands.command()
+    async def status(self):
+        """Get the bot status"""
+        embed = discord.Embed(title="%s#%s" % (self.bot.user.name, self.bot.user.discriminator),
+                              description="A bot written in python", color=0x9A32CD)
+        embed.add_field(name="Owner", value="Era#4669", inline=False)
+        currentTime = self.getTime()
+        seconds = int(currentTime - bot_startup)
+        uptime = self.calculateTime(seconds)
+        embed.add_field(name="Uptime",
+                        value="Have been mixing drinks for %sd%sh%sm%ss" % (uptime[0], uptime[1], uptime[2], uptime[3]),
+                        inline=False)
+        embed.set_thumbnail(url=self.bot.user.avatar_url)
+        await self.bot.say(embed=embed)
 
 
 def setup(bot):
