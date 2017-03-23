@@ -1,4 +1,4 @@
-import discord
+import discord, math
 from discord.ext import commands
 from cogs.utils import checks
 
@@ -44,10 +44,14 @@ class general:
         await self.bot.say(msg)
 
     @commands.command()
-    @checks.is_owner()
     async def eval(self, *, var: str):
-        """Evaluates stuff. Owner only"""
-        await self.bot.say(eval(var))
+        """Evaluates stuff."""
+        bl = ['**', '__', 'lambda']
+        for item in bl:
+            if item in var:
+                self.bot.say("That is too unsafe for this. Please kill yourself to prevent further damage to owner's system")
+                return
+        await self.bot.say(eval(var, {'__builtins__': {'math': math, 'sum': sum, 'str': str, 'int': int, 'float': float}}))
 
     @commands.command()
     async def invite(self):

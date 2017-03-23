@@ -16,6 +16,8 @@ class events:
         await self.bot.send_message(member.server, "Thanks for your patronage, %s, please come again." % member.name)
 
     async def on_member_join(self, member):
+        if member.bot:
+            return
         channel = self.bot.get_channel("290026887114391552")
         await self.bot.send_message(channel, "Welcome to KUD, %s. You will be given access to talk outside of <#%s> in 5 minutes. **Feel free to communicate with any of the staff members while you're in here.**" % (member.mention, channel.id))
 

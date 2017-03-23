@@ -25,6 +25,8 @@ class welcome:
                 return None
 
     async def on_member_join(self, member):
+        if member.bot:
+            return
         self.imageGen(member)
         await self.bot.send_file(member.server, './cogs/assets/test.png',
                             content="Welcome to Kindly United Dreams, %s, Please read the rules over at <#%s>" % (
