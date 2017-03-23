@@ -18,7 +18,7 @@ class general:
             await self.bot.say('http://www.urbandictionary.com/define.php?term=%s' % search)
 
     @commands.command(name='mal', aliases=["kitsu", "anilist"], pass_context=True)
-    async def anime(self, ctx, content: str):
+    async def anime(self, ctx, content: str = None):
         '''gets your animelist, supply with username'''
         cmd = ctx.invoked_with
         if content is not None:
