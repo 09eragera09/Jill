@@ -1,12 +1,14 @@
 import discord
 from discord.ext import commands
 import logging
-from asyncio import sleep
+import asyncio
 import os
 from cogs.utils import checks
 
 description = """Jill, a shitty bot written in Python, based off of Chiaki"""
-bot = commands.Bot(command_prefix="!", description=description, pm_help=True)
+loop = asyncio.get_event_loop()
+asyncio.get_child_watcher().attach_loop(loop)
+bot = commands.Bot(command_prefix="!", description=description, pm_help=True, loop = loop)
 
 @bot.group(hidden=True)
 @checks.is_owner()
@@ -28,7 +30,7 @@ async def _reload(ctx, *, cogs: str = None):
     temp = [cog for cog in cogs]
     for cog in cogs:
         bot.unload_extension('cogs.'+cog.replace('.py', ''))
-    await sleep(1)
+    await asyncio.sleep(1)
     load_cogs = []
     not_loaded = []
     for cog in cogs:

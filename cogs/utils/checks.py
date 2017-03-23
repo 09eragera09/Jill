@@ -41,7 +41,7 @@ def role_or_permissions(ctx, check, **perms):
 
 def mod_or_permissions(**perms):
     def predicate(ctx):
-        return role_or_permissions(ctx, lambda r: r.name in ('Bot Mod', 'Bot Admin', 'Staff', 'Lewd', 'Lood'), **perms)
+        return role_or_permissions(ctx, lambda r: r.name in ('Bot Mod', 'Bot Admin', 'Staff'), **perms)
 
     return commands.check(predicate)
 
