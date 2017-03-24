@@ -8,9 +8,11 @@ class moderation:
         self.bot = bot
 
     @commands.command(name='prune', pass_context=True)
-    @checks.mod_or_permissions()
     async def _prune(self, ctx, *, content: str = None):
         "Prunes stuff. Can take multiple user names in any order"
+        if not ctx.message.author.server_permissions.manage_messages and not(checks.is_owner_check(ctx.message)):
+            return
+
         if content is not None:
             content = content.split()
             num = 0
@@ -40,18 +42,30 @@ class moderation:
             await self.bot.delete_messages(to_delete)
 
     @commands.command(pass_context=True)
-    @checks.mod_or_permissions()
-    async def ban(self, ctx):
-        """Bans people"""
-        for member in ctx.message.mentions:
-            await self.bot.ban(member)
-
-    @commands.command(pass_context=True)
-    @checks.mod_or_permissions()
-    async def kick(self, ctx):
-        """Kicks people"""
-        for member in ctx.message.mentions:
-            await self.bot.kick(member)
+    async def moderation(self, ctx):
+        """Invoke with the specifc command you want."""
+        message = ctx.message
+        if message.channel.is_private:
+            return
+        if checks.is_owner_check(message):
+            authorize = True
+        cmd = ctx.invoked_with
+        if message.mentions and not message.mention_everyone:
+            for member in message.mentions:
+                if cmd == "ban" and authorize or message.author.server_permissions.ban_members:
+                    await self.bot.ban(member)
+                if cmd == "kick" and authorize or message.author.server_permissions.kick_members:
+                    await self.bot.kick(member)
+                if cmd == "mute" and authorize or message.author.server_permissions.manage_roles:
+                    if not "Muted" in [x.name for x in member.server.roles]:
+                        await self.bot.create_role(member.server, name="Muted", permissions=discord.Permissions.none())
+                        await self.bot.send_message(member.server.owner,
+                                                    "The `Muted` role has been added to the server, please give it the required channel permissions")
+                    await self.bot.add_roles(member, [x for x in member.server.roles if x.name == "Muted"][0])
+                if cmd == "unmute" and authorize or message.author.server_permissions.manage_roles:
+                    if not "Muted" in [x.name for x in member.roles]:
+                        await self.bot.say("This user is not Muted, so not unmuted")
+                    await self.bot.remove_roles(member, [x for x in member.roles if x.name == "Muted"][0])
 
     @commands.command(pass_context=True, hidden=True)
     @checks.mod_or_permissions()
@@ -59,28 +73,6 @@ class moderation:
         """Unbans people, WIP"""
         for member in ctx.message.mentions:
             await self.bot.unban(member)
-
-    @commands.command(pass_context=True)
-    @checks.mod_or_permissions()
-    async def mute(self, ctx):
-        "Adds the 'Muted' role to users, creates one if it doesnt exist"
-        if ctx.message.mentions and not ctx.message.mention_everyone:
-            for member in ctx.message.mentions:
-                if not "Muted" in [x.name for x in member.server.roles]:
-                    await self.bot.create_role(member.server, name="Muted", permissions=discord.Permissions.none())
-                    await self.bot.send_message(member.server.owner, "The `Muted` role has been added to the server, please give it the required channel permissions")
-                await self.bot.add_roles(member, [x for x in member.server.roles if x.name == "Muted"][0])
-
-    @commands.command(pass_context=True)
-    @checks.mod_or_permissions()
-    async def unmute(self, ctx):
-        """Removes the 'Muted' role from users"""
-        if ctx.message.mentions and not ctx.message.mention_everyone:
-            for member in ctx.message.mentions:
-                if not "Muted" in [x.name for x in member.roles]:
-                    await self.bot.say("This user is not Muted, so not unmuted")
-                await self.bot.remove_roles(member, [x for x in member.roles if x.name == "Muted"][0])
-
 
 def setup(bot):
     bot.add_cog(moderation(bot))

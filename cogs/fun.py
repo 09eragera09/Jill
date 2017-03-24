@@ -30,10 +30,11 @@ class fun:
                      'My sources say no', 'Outlook not so good', 'Very doubtful']
         await self.bot.say(choice(magicball))
 
+
     @commands.command()
     async def shitwaifu(self):
         '''your waifu is shit'''
-        await self.bot.say("http://azelf.net/mfw/shitwaifu.png")
+        await self.bot.say("http://i2.kym-cdn.com/photos/images/original/000/756/008/29d.jpg")
 
     @commands.command(name='choose', aliases=['choice'])
     async def _choose(self, *, choices: str = None):

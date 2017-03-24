@@ -26,6 +26,10 @@ class welcome:
 
     async def on_member_join(self, member):
         if member.bot:
+            bot_role = [x for x in member.server.roles if x.name == "Lesser Bots"]
+            if member.name not in [x.name for x in member.server.roles]:
+                await self.bot.create_role(member.server, name=member.name, permissions=discord.Permissions.none())
+            await self.bot.add_roles(member, [x for x in member.server.roles if x.name == member.name][0], bot_role)
             return
         self.imageGen(member)
         await self.bot.send_file(member.server, './cogs/assets/test.png',

@@ -59,7 +59,7 @@ class utility:
             time = int(timestr)
         except:
             await self.bot.say(try_again)
-        date = strftime("%Y-%m-%d %H:%M")
+        date = datetime.now().strftime("%Y-%m-%d %H:%M")
         if format in ["second", "seconds"]:
             await self.bot.say("You will be sent a reminder through DM in %s second(s)!" % timestr)
             await sleep(time)
@@ -149,11 +149,12 @@ class utility:
         seconds = (datetime.datetime.now() - self.bot_startup).seconds
         uptime = self.calculateTime(seconds)
         embed.add_field(name="Uptime",
-                        value="Have been mixing drinks for %sd%sh%sm%ss" % (uptime[0], uptime[1], uptime[2], uptime[3]),
+                        value="Have been mixing drinks for %sd%sh%sm%ss" % (
+                        uptime[0], uptime[1], uptime[2], uptime[3]),
                         inline=False)
         embed.set_thumbnail(url=self.bot.user.avatar_url)
-        await self.bot.say(embed=embed)
 
+        await self.bot.say(embed=embed)
 
 def setup(bot):
     bot.add_cog(utility(bot))
