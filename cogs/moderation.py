@@ -41,10 +41,11 @@ class moderation:
                         break
             await self.bot.delete_messages(to_delete)
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases = ['ban', 'kick', 'mute', 'unmute'])
     async def moderation(self, ctx):
         """Invoke with the specifc command you want."""
         message = ctx.message
+        authorize = False
         if message.channel.is_private:
             return
         if checks.is_owner_check(message):
