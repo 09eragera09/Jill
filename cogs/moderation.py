@@ -53,17 +53,17 @@ class moderation:
         cmd = ctx.invoked_with
         if message.mentions and not message.mention_everyone:
             for member in message.mentions:
-                if cmd == "ban" and authorize or message.author.server_permissions.ban_members:
+                if cmd == "ban" and (authorize or message.author.server_permissions.ban_members):
                     await self.bot.ban(member)
-                if cmd == "kick" and authorize or message.author.server_permissions.kick_members:
+                if cmd == "kick" and (authorize or message.author.server_permissions.kick_members):
                     await self.bot.kick(member)
-                if cmd == "mute" and authorize or message.author.server_permissions.manage_roles:
+                if cmd == "mute" and (authorize or message.author.server_permissions.manage_roles):
                     if not "Muted" in [x.name for x in member.server.roles]:
                         await self.bot.create_role(member.server, name="Muted", permissions=discord.Permissions.none())
                         await self.bot.send_message(member.server.owner,
                                                     "The `Muted` role has been added to the server, please give it the required channel permissions")
                     await self.bot.add_roles(member, [x for x in member.server.roles if x.name == "Muted"][0])
-                if cmd == "unmute" and authorize or message.author.server_permissions.manage_roles:
+                if cmd == "unmute" and (authorize or message.author.server_permissions.manage_roles):
                     if not "Muted" in [x.name for x in member.roles]:
                         await self.bot.say("This user is not Muted, so not unmuted")
                     await self.bot.remove_roles(member, [x for x in member.roles if x.name == "Muted"][0])
