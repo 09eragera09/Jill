@@ -3,16 +3,11 @@ from discord.ext import commands
 from wand.drawing import Drawing
 from wand.image import Image
 from wand.color import Color
-from asyncio import sleep
-from configparser import ConfigParser
 
 class welcome:
     """Welcome Card"""
     def __init__(self, bot):
         self.bot = bot
-        parser = ConfigParser()
-        parser.read('./data/config/config.ini')
-        self.channel_id = parser['channel']['id']
 
     def imageGen(self, member):
         with Drawing() as draw:
@@ -39,13 +34,6 @@ class welcome:
         await self.bot.send_file(member.server, './cogs/assets/test.png',
                             content="Welcome to Kindly United Dreams, %s, Please read the rules over at <#%s>" % (
                             member.mention, [x.id for x in member.server.channels if x.name == "readme"][0]))
-        music_role = [x for x in member.server.roles if x.name == "Music"][0]
-        image_role = [x for x in member.server.roles if x.name == "Image"][0]
-        suggestion_role = [x for x in member.server.roles if x.name == "Suggestion"][0]
-        role_list = [music_role, image_role, suggestion_role]
-        await self.bot.add_roles(member, role_list[0], role_list[1], role_list[2])
-        await sleep(300)
-        await self.bot.add_roles(member, [x for x in member.server.roles if x.id == self.channel_id][0])
 
     @commands.command(name='welcome', aliases=['wleocme'], pass_context=True, hidden=True)
     async def wleocme(self, ctx):

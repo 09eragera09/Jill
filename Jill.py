@@ -52,6 +52,17 @@ async def _reload(ctx, *, cogs: str = None):
         embed.add_field(name="❯ Cogs that couldn't be reloaded:", value=msg_not_loaded)
     await bot.say(embed=embed)
 
+@cogs.command(name='unload', pass_context=True)
+async def unload(ctx, *, cogs: str = None):
+    if cogs is not None:
+        cogs = cogs.split(' ')
+    for cog in cogs:
+        try:
+            bot.get_cog(cog)
+            bot.unload_extension('cogs.'+cog.replace('.py', ''))
+        except:
+            await bot.say('`'+cog+'` is not a cog.')
+
 @cogs.command(name='list')
 async def _list():
     all_cogs = [f for f in os.listdir("./cogs") if os.path.isfile(os.path.join("./cogs", f))]
