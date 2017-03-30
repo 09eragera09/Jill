@@ -64,6 +64,23 @@ class general:
         '''Get source on github'''
         await self.bot.say("Here's my source code https://github.com/09eragera09/Jill")
 
+    @commands.command(name="role", pass_context=True)
+    async def users_that_have_a_particular_role(self, ctx, *, var: str = None):
+        """To check how many users have a particular role"""
+        if var is None:
+            return
+        try:
+            role = [x for x in ctx.message.server.roles if x.name == var][0]
+        except:
+            await self.bot.say("No such role exists on server")
+            return
+
+        member_list = []
+
+        for member in ctx.message.server.members:
+            if role in member.roles:
+                member_list.append(member.name)
+        await self.bot.say("Currently, the role %s has %d users. The following users have that role: %s" % (var, len(member_list), ', '.join(member_list)))
 
 def setup(bot):
     bot.add_cog(general(bot))
