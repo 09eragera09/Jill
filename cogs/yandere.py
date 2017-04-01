@@ -17,7 +17,7 @@ class yandere:
     async def yandere_search(self, ctx, *, tags: str = ""):
         """Aliases !nsfw and !sfw for specific rated images, accepts tags"""
         nsfw = [x for x in ctx.message.server.channels if x.name == "nsfw"][0]
-        images = [x for x in ctx.message.server.channels if x.name == "images"][0]
+        images = [x for x in ctx.message.server.channels if x.name == "image"][0]
         cmd = ctx.invoked_with
         tags = tags.split()
         tags.append("order:random -partial_scan")

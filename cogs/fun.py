@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 from random import choice
+import urllib.request
+from wand.image import Image
 
 class fun:
     """Commands that do not affect the functionality of the bot, only for users"""
@@ -49,10 +51,24 @@ class fun:
         else:
             await self.bot.say("Please use correct syntax.")
 
-
-#    @commands.command()
- #   async def bartender(self, *, flavor: str):
-  #      drinks = {}
+    @commands.command(pass_context=True)
+    async def morejpeg(self, ctx, *, url: str = None):
+        if url is None:
+            for message in reversed(self.bot.messages):
+                if ctx.message.server == message.server and message.embeds:
+                    for embed in message.embeds:
+                        if embed.url.endswith("png") or embed.url.endswith("jpg"):
+                            url = embed.url
+                            url_obtained = True
+                try:
+                    if url_obtained:
+                        break
+                except:
+                    pass
+        urllib.request.urlretrieve(url, 'muh_image')
+        with Image(filename='muh_image') as image:
+            image.save(filename="morejpeg.jpg")
+        await self.bot.send_file(message.channel, 'morejpeg.jpg')
 
 def setup(bot):
     bot.add_cog(fun(bot))
