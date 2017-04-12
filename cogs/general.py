@@ -57,7 +57,7 @@ class general:
     async def invite(self):
         '''Invite link to add to more servers'''
         await self.bot.say(
-            "Here's my invite link https://discordapp.com/oauth2/authorize?&client_id=271241978556055552&scope=bot")
+            "Here's my invite link https://discordapp.com/oauth2/authorize?permissions=8&scope=bot&client_id=271241978556055552")
 
     @commands.command()
     async def source(self):
