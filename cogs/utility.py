@@ -59,7 +59,7 @@ class utility:
             time = int(timestr)
         except:
             await self.bot.say(try_again)
-        date = datetime.now().strftime("%Y-%m-%d %H:%M")
+        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
         if format in ["second", "seconds"]:
             await self.bot.say("You will be sent a reminder through DM in %s second(s)!" % timestr)
             await sleep(time)

@@ -51,7 +51,6 @@ async def _reload(ctx, *, cogs: str = None):
         msg_not_loaded = ", ".join(not_loaded).title()
         embed.add_field(name="❯ Cogs that couldn't be reloaded:", value=msg_not_loaded)
     await bot.say(embed=embed)
-
 @cogs.command(name='unload', pass_context=True)
 async def unload(ctx, *, cogs: str = None):
     if cogs is not None:
