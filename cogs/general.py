@@ -64,6 +64,15 @@ class general:
         '''Get source on github'''
         await self.bot.say("Here's my source code https://github.com/09eragera09/Jill")
 
+    @commands.command(name="clean", aliases=["cleanup", "fuckoffJill"])
+    async def clean(self):
+        """Cleans up the message channel"""
+        to_delete=[]
+        for message in reversed(self.bot.messages):
+            if message.author == self.bot.user:
+                to_delete.append(message)
+        await self.bot.delete_messages(to_delete)
+
     @commands.command(name="role", pass_context=True)
     async def users_that_have_a_particular_role(self, ctx, *, var: str = None):
         """To check how many users have a particular role"""
