@@ -89,6 +89,9 @@ class general:
         for member in ctx.message.server.members:
             if role in member.roles:
                 member_list.append(member.name)
+        if len(member_list) == 0:
+            await self.bot.say("Role exists but has no users.")
+            return
         await self.bot.say("Currently, the role %s has %d users. The following users have that role: %s" % (var, len(member_list), ', '.join(member_list)))
 
 def setup(bot):

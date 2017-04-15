@@ -4,6 +4,7 @@ import logging
 import asyncio
 import os
 from cogs.utils import checks
+from time import sleep
 
 description = """Jill, a shitty bot written in Python, based off of Chiaki"""
 loop = asyncio.get_event_loop()
@@ -102,6 +103,7 @@ global bot_startup
 token = open('token', 'r').read()
 token = token.rstrip('\n')
 while True:
+    sleep(5)
     try:
         bot.run(token)
     except ConnectionResetError:
