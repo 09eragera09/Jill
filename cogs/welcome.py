@@ -3,6 +3,8 @@ from discord.ext import commands
 from wand.drawing import Drawing
 from wand.image import Image
 from wand.color import Color
+from asyncio import sleep
+
 
 class welcome:
     """Welcome Card"""
@@ -25,10 +27,13 @@ class welcome:
 
     async def on_member_join(self, member):
         if member.bot:
-            bot_role = [x for x in member.server.roles if x.name == "Lesser Bots"]
+            bot_role = [x for x in member.server.roles if x.name == "Bots"]
             if member.name not in [x.name for x in member.server.roles]:
                 await self.bot.create_role(member.server, name=member.name, permissions=discord.Permissions.none())
             await self.bot.add_roles(member, [x for x in member.server.roles if x.name == member.name][0], bot_role)
+            return
+        await sleep(300)
+        if member not in member.server.members:
             return
         self.imageGen(member)
         await self.bot.send_file(member.server, './cogs/assets/test.png',
