@@ -35,7 +35,7 @@ class events:
         role_list = [image_role, suggestion_role]
         await self.bot.add_roles(member, role_list[0], role_list[1])
         await sleep(300)
-        await self.bot.add_roles(member, [x for x in member.server.roles if x.id == self.role_id][0])
+        await self.bot.add_roles(member, [x for x in member.server.roles if x.name == "Member"][0])
 
 def setup(bot):
     bot.add_cog(events(bot))
