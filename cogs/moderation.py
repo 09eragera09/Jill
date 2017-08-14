@@ -68,6 +68,16 @@ class moderation:
                         await self.bot.say("This user is not Muted, so not unmuted")
                     await self.bot.remove_roles(member, [x for x in member.roles if x.name == "Muted"][0])
 
+    @commands.command(pass_context=True)
+    async def banme(self, ctx, *, content: str = None):
+        """Ban yourself nigga"""
+        if content is not None:
+            if content in ['pls', 'please']:
+                await self.bot.ban(ctx.message.author)
+        else:
+            await self.bot.say("No.")
+
+
     @commands.command(pass_context=True, hidden=True)
     @checks.mod_or_permissions()
     async def unban(self, ctx):
