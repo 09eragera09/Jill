@@ -70,12 +70,12 @@ class moderation:
 
     @commands.command(pass_context=True)
     async def banme(self, ctx, *, content: str = None):
-        """Ban yourself nigga"""
+        """Ban yourself nigga, use the magic word please to make it do your bidding"""
         if content is not None:
             if content in ['pls', 'please']:
                 await self.bot.ban(ctx.message.author)
         else:
-            await self.bot.say("No.")
+            await self.bot.say("No, you impolite cunt.")
 
 
     @commands.command(pass_context=True, hidden=True)
